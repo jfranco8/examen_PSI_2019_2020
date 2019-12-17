@@ -1,0 +1,112 @@
+python manage.py runserver
+
+
+1. Create a project named project in Django. Then create an application named
+application. Data will be persisted in a postgres database called exam.
+
+-> crear proyecto y app:
+django-admin.py startproject project
+python manage.py startapp application
+
+-> comprobar (en settings.py):
+  INSTALLED_APPS = [ ...
+  'application',
+  ]
+-> ejecutar para comprobar todo bien
+python manage.py runserver
+
+-> anyadir en setting.py:
+import dj_database_url
+
+DATABASES={}
+if os.getenv('SQLITE',False):
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+else:
+    DATABASES['default'] = dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/exam')
+
+-> crear base datos:
+dropdb -U alumnodb -h localhost exam
+createdb -U alumnodb -h localhost psi
+
+===================================================================================
+2. Create the data model (models.py) and configure the project so that the data can
+be seen using the admin interface (http://localhost:8000/admin/).
+
+-> crear un modelo:
+class <>(models.Model):
+    """ This class defines the structure of a <> object in the database.
+    """
+    name<> = models.CharField(max_length=128)
+    #models.ForeignKey(Patient)
+    #models.SlugField(unique=True)
+    #models.IntegerField(default=0)
+    #models.ManyToManyField(Category, blank= False)
+    #models.DateField()
+
+    def save(self, *args, **kwargs):
+        super(<>, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = '<>'
+
+    def __str__(self): # For Python 2, use __unicode__ too
+        return self.name<>
+    def __unicode__(self): # For Python 2, use __unicode__ too
+        return self.name<>
+
+-> aplicar cambios
+python manage.py makemigrations application
+python manage.py migrate
+
+-> habilitar admin y comprobar que va [alumnodb]
+python manage.py createsuperuser
+
+=======================================================================================
+3. Write a script (called populate.py) that insert the following data into the data-set
+using the Django API.
+doctor(1,’doctor1’)
+doctor(2,’doctor2’)
+doctor(3,’doctor3’)
+doctor(4,’doctor4’)
+patient(1,’patient1’)
+patient(2,’patient2’)
+prescription(1,1,1)
+prescription(2,2,1)
+prescription(3,1,2)
+prescription(4,2,2)
+prescription(5,3,2)
+
+
+
+===================================================================================
+4. Deploy the project in Heroku and populate the data base using the script populate.py,
+doublecheck that the admin interface is available and can be accessed with the
+username/password alunodb. Nota: write down in the file memoria.txt the admin
+interface URL. IMPORTANT: Whenever the project was been deployed in heroku
+(and always before the exam finalization) show it to your teacher.
+
+
+===================================================================================
+5. Using the template prescription.html, crea a new web page with URL $PRO-
+JECT URL/application/prescription/ that returns a list with the last 3 prescrip-
+tions. Note: Do not modify the file prescription.html. If the database is empty
+the web page should show an error message using the variable error. The last 3
+prescriptions should be obtained using a query, that is, do not get a list with all
+prescriptions and then sort it in the view.
+
+
+===================================================================================
+6. Create a test (which should be run with the command python manage.py aplication.test
+--keepdb) that:
+deletes all doctors, patients and prescriptions
+creates the doctor (1,’doctor1’)
+creates el patient (1,’patient1’)
+creates la prescription (1,1,1)
+creates la prescription (2,1,1)
+creates la prescription (3,1,1)
+creates la prescription (4,1,1)
+2access to the view $PROJECT URL/application/prescription/
+using assertions, check that the returned prescriptions are correct.

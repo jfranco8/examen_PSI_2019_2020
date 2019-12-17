@@ -1,0 +1,20 @@
+{% extends "mouse_cat/base.html" %}
+
+{% block content %}
+<div id="content" class="signup_div">
+    <br>
+    <h1 class="blanco">Instructions</h1>
+    <p>Welcome to Cats vs Mouse!!</p>
+    <p>The game is made for two players, one will be the cats and the other the
+       mouse. Cats moves first, then players alternate their moves. The cat
+        player begins the game with 4 cats, and the mouse player with one
+         mouse.</p>
+    <p>To move, each player places one of their pieces on a diagonal white
+       squares close to that piece, the cats are able to move only forward,
+        but the mouse can move both forward and backwards.</p>
+    <p>The aim of the game is for the cats to catch the mouse so it has no
+       possible moves to make and for the mouse to overstep the cats or get
+        to the other side of the board.</p>
+    <!-- <p><a href="{% url 'landing' %}">Return to homepage</a></p> -->
+</div>
+{% endblock content %}

@@ -1,0 +1,206 @@
+{% extends "mouse_cat/base.html" %}
+
+{% load staticfiles %}
+
+{% block extra_js%}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+  }
+
+  $(document).on('click', '#avance', function(e) {
+    e.preventDefault()
+    var csrf_token = getCookie('csrftoken');
+
+    $.ajax({
+      type: "POST",
+      url: "/ratonGato/get_move/",
+      data:{
+        shift: "1"
+      },
+      headers: { "X-CSRFToken": csrf_token
+      },
+      success: function(returndata){
+
+        ori = returndata.origin
+        dest = returndata.target
+        console.log("origen")
+        console.log(ori)
+        console.log("destino")
+        console.log(dest)
+        pic = $('#' + ori).children()[0]
+        $('#' + ori).children().remove()
+        $('#' + dest).html(pic)
+
+      },
+      error: function(){
+        console.log("error avance");
+      }
+    });
+  });
+
+  $(document).on('click', '#retroceda', function(e) {
+    e.preventDefault()
+    var csrf_token = getCookie('csrftoken');
+
+    $.ajax({
+      type: "POST",
+      url: "/ratonGato/get_move/",
+      data:{
+        shift: "-1"
+      },
+      headers: { "X-CSRFToken": csrf_token
+      },
+      success: function(returndata){
+
+        ori = returndata.origin
+        dest = returndata.target
+        console.log("origen")
+        console.log(ori)
+        console.log("destino")
+        console.log(dest)
+        pic = $('#' + ori).children()[0]
+        $('#' + ori).children().remove()
+        $('#' + dest).html(pic)
+
+      },
+      error: function(){
+        console.log("error retroceda");
+      }
+    });
+  });
+
+  $(document).on('click', '#auto_replay', function(e) {
+    e.preventDefault()
+    var csrf_token = getCookie('csrftoken');
+
+    function replay(e)
+      {$.ajax({
+        type: "POST",
+        url: "/ratonGato/get_move/",
+        data:{
+          shift: "1"
+        },
+        headers: { "X-CSRFToken": csrf_token
+        },
+        success: function(returndata){
+
+          ori = returndata.origin
+          dest = returndata.target
+          console.log("origen")
+          console.log(ori)
+          console.log("destino")
+          console.log(dest)
+          pic = $('#' + ori).children()[0]
+          $('#' + ori).children().remove()
+          $('#' + dest).html(pic)
+
+        },
+        error: function(){
+          console.log("error avance");
+        }
+      });}
+
+    varInterval = setInterval( replay, 2000);
+
+  });
+
+  $(document).on('click', '#pause_replay', function(e) {
+    e.preventDefault()
+    clearInterval(varInterval)
+  });
+
+</script>
+
+{% endblock extra_js%}
+
+{% block content %}
+<div id="content">
+    <br>
+    <h1 class = "blanco">Replay game</h1>
+    <div class="in_linea tam_total">
+      <div class="game_info_div blanco">
+        <p>Game: <b>{{ game.id }}</b></p>
+        <!-- <form id="move_form" method="post" action="{% url 'move' %}"> -->
+            {% csrf_token %}
+            <!-- <p>
+                Cats: <b>{{ game.cat_user.username }}</b>
+                {% if game.cat_user.id == request.user.id %}
+                    <blockquote class="cat">
+                        {% if game.cat_turn %}
+                            <p>Your turn!</p>
+                        {% else %}
+                            Waiting for the mouse...
+                        {% endif %}
+                    </blockquote>
+                {% endif %}
+            </p>
+            <p>
+                Mouse: <b>{{ game.mouse_user.username }}</b>
+                {% if game.mouse_user.id == request.user.id %}
+                    <blockquote class="mouse">
+                        {% if not game.cat_turn %}
+                            <p>Your turn!</p>
+                        {% else %}
+                            Waiting for the cat...
+                        {% endif %}
+                    </blockquote>
+                {% endif %}
+            </p> -->
+            <!-- <a onclick="avanzar(event, {{ game.id }}, {{ move.id }})">Next</a>
+            <a onclick="retroceder(event , {{ game.id }}, {{ move.id }})">Previous</a> -->
+            <input type="button" id="avance" class="boton_login" value="Next"><br><br>
+            <input type="button" id="retroceda" class="boton_login" value="Previous"><br><br>
+            <input type="button" id="auto_replay" class="boton_login" value="Replay"><br><br>
+            <input type="button" id="pause_replay" class="boton_login" value="Pause"><br><br>
+        <!-- </form> -->
+      </div>
+    {% if board %}
+        <!-- <p>Board: {{ board }}</p> -->
+        <div class="game_div">
+        <table >
+        {% for item in board %}
+            {% if forloop.counter0|divisibleby:8 %}<tr>{% endif %}
+              {% if forloop.counter0 in blanks %}
+                <td  id="{{ forloop.counter0}}" class="cuadradoblanco" style='height:50px;width:50px;border:1px solid #000000;text-align:center;'>
+                    {% if item == 1 %}
+                      <img src="{% static 'images/rasca.PNG' %}" id="cell_{{forloop.counter0}}" alt="rasca" width="45px" height="45px" draggable="true">
+                    {% elif item == -1 %}
+                      <img src="{% static 'images/pica.PNG' %}" id="cell_{{forloop.counter0}}" alt="pica" width="45px" height="45px" draggable="true">
+                    {% endif %}
+                </td>
+              {% else %}
+                <td id="{{ forloop.counter0}}" class="cuadradonegro" style='height:50px;width:50px;border:1px solid #000000;text-align:center;'>
+                    {% if item == 1 %}
+                      <img src="{% static 'images/rasca.PNG' %}" id="cell_{{forloop.counter0}}" alt="rasca" width="45px" height="45px" draggable="true">
+                    {% elif item == -1 %}
+                      <img src="{% static 'images/pica.PNG' %}" id="cell_{{forloop.counter0}}" alt="pica" width="45px" height="45px" draggable="true">
+                    {% endif %}
+                </td>
+              {% endif %}
+
+            {% if forloop.counter|divisibleby:8 or forloop.last %}</tr>{% endif %}
+        {% endfor %}
+        </table>
+      </div>
+    {% endif %}
+
+    </div>
+
+    <!-- <p><a href="{% url 'landing' %}">Return to homepage</a></p> -->
+</div>
+{% endblock content %}

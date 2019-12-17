@@ -1,0 +1,18 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+  About
+{% endblock %}
+
+{% block body_block %}
+  <h1>Rango says...</h1>
+  <div>
+    here is the about page :)<br/>
+    <strong>{{ boldmessage }}</strong><br/>
+  </div>
+  <div>
+    <img src="{{MEDIA_URL}}cat.jpg" alt="Error finding the cat">
+    <img src="{% static 'images/rango.jpg' %}" alt="Picture of Vallekas"/>
+  </div>
+{% endblock %}

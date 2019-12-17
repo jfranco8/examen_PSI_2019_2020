@@ -1,0 +1,70 @@
+{% load staticfiles %}
+<html>
+<head>
+    {% block extra_css %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    {% endblock extra_css %}
+
+    {% block extra_js %}
+
+    {% endblock extra_js %}
+
+    {% block extra_head %}
+
+    {% endblock extra_head %}
+    <title>{% block title %}Cats vs. Mouse{% endblock %}</title>
+</head>
+
+<body id="body">
+
+  <header>
+    <a href = "{% url 'index' %}"><img class="logo" alt="Error" src="{% static 'images/cats_mouse_logo.png' %}"></a>
+
+    {% if request.user.is_authenticated %}
+      <select id="menu_usuario" onchange="location = this.value;" >
+        <option>{{ request.user }}</option>
+        <option value="{% url 'create_game' %}">Create game</option>
+        <option value="{% url 'join_game' %}">Join game</option>
+        <option value="{% url 'select_game_cat' %}">Select game Cats</option>
+        <option value="{% url 'select_game_mouse' %}">Select game Mouse</option>
+        <option value="{% url 'show_game' %}">Play selected game</option>
+        <option value="{% url 'logout' %}">Logout</option>
+      </select>
+    {% else %}
+      <select id="menu_usuario" onchange="location = this.value;" >
+        <option>Join us!</option>
+        <option value="{% url 'login' %}">Login</option>
+        <option value="{% url 'signup' %}">Sign up</option>
+      </select>
+    {% endif %}
+
+  </header>
+<!--
+    <div id="totalheader">
+        <div id="title">
+            {% block atitle %}<h1>Mouse vs. Cats application</h1>{% endblock atitle %}
+        </div>
+
+        <div id="header">
+            {% if request.user.is_authenticated %}
+                Welcome <span class="username">{{ request.user.username }}</span>!
+            {% endif %}
+        </div>
+    </div>
+
+    <hr/> -->
+    <article>
+      {% block content %}
+      {% endblock content %}
+    </article>
+
+    <footer>
+      <a href = "{% url 'index' %}" class="boton_abajo">Go to homepage</a>
+    </footer>
+
+    <!-- <hr/>
+
+    {% block footer %}
+    {% endblock footer %} -->
+</body>
+</html>

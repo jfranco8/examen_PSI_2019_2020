@@ -1,0 +1,33 @@
+{% extends "mouse_cat/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+
+  <img class="fotocentro" alt="Error" src="{% static 'images/welcome.png' %}"><br>
+  <a href="{% url 'create_game' %}" class="central_op">Create game</a><br>
+  <a href="{% url 'join_game' %}" class="central_op">Join game</a><br>
+  <a href="{% url 'select_game' %}" class="central_op">Select game</a><br>
+  <!-- <a href="{% url 'select_game_cat' %}" class="central_op">Select game Cats</a><br>
+  <a href="{% url 'select_game_mouse' %}" class="central_op">Select game Mouse</a><br> -->
+  <a href="{% url 'show_game' %}" class="central_op">Show game and play</a><br>
+  <a href="{% url 'select_replay_game' %}" class="central_op">Replay game</a><br>
+  <a href="{% url 'counter' %}" class="central_op">Counter</a><br>
+  <a href="{% url 'instructions' %}" class="central_op">How do I play?</a><br>
+  <a href="{% url 'logout' %}" class="central_op_logout">Logout</a><br>
+
+
+{% else %}
+
+  <img class="fotocentro" alt="Error" src="{% static 'images/join_us.png' %}"><br>
+  <a href="{% url 'login' %}" class="central_op">Login</a><br>
+  <a href="{% url 'signup' %}" class="central_op">Signup</a><br>
+  <a href="{% url 'counter' %}" class="central_op">Counter</a><br>
+  <a href="{% url 'instructions' %}" class="central_op">How do I play?</a><br>
+
+
+{% endif %}
+
+{% endblock %}

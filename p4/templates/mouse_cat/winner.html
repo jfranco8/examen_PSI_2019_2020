@@ -1,0 +1,28 @@
+{% extends "mouse_cat/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+<div id="content">
+    <br>
+    <p class="blanco">WINNER: {{ winner }}</p>
+    <p class="blanco">GAME: {{ game }}</p>
+
+    {% if you_win %}
+      <h1 class="blanco">WINNER WINNER CHICKEN DINNER</h1>
+      <img src={% static 'images/congrats_dance.gif' %} class="gif_winner_looser">
+    {% else %}
+      <h1 class="blanco">LOSER HA</h1>
+      <img src={% static 'images/nelson_haha.gif' %} class="gif_winner_looser">
+    {% endif %}
+
+    {% if cat_wins %}
+    <p class="red negrita">Cat wins</p>
+    <img src={% static 'images/rasca.PNG' %} class="pequeñaimagen">
+    {% else %}
+      <p class="red negrita">Mouse wins</p>
+      <img src={% static 'images/pica.PNG' %} class="pequeñaimagen">
+    {% endif %}
+    <!-- <p><a href="{% url 'landing' %}">Return to homepage</a></p> -->
+</div>
+{% endblock content %}

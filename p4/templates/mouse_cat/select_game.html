@@ -1,0 +1,74 @@
+{% extends "mouse_cat/base.html" %}
+
+{% block content %}
+<div id="content">
+    <br>
+    <h1 class="blanco ">Select game</h1>
+    <div class="in_linea tam_total">
+    <div class="filters_div">
+    <p class="blanco negrita">Apply filters:</p>
+    <a href="{% url 'select_game_cat'%}" class="central_op">Cats</a><br>
+    <a href="{% url 'select_game_mouse'%}" class="central_op">Mouse</a><br>
+    <a href="{% url 'select_game'%}" class="central_op">Delete filters</a><br>
+    </div>
+    <div class="games_div">
+    {% if filter %}
+      {% if cats %}
+        <p>
+            {% if as_cat %}
+                <h1 class="blanco ">Games as cat:</h1>
+                <ul>
+                {% for game in as_cat %}
+                    <li> <a href="{% url 'select_game_cat' game.id %}" class="blanco">{{ game }}</a></li>
+                {% endfor %}
+                </ul>
+            {%  else %}
+                <h1 class="red">No games as cat</h1>
+            {% endif %}
+        </p>
+        {% else %}
+        <p>
+            {% if as_mouse %}
+                <h1 class="blanco ">Games as mouse:</h1>
+                <ul>
+                {% for game in as_mouse %}
+                    <li> <a href="{% url 'select_game_mouse' game.id %}" class="blanco">{{ game }}</a></li>
+                {% endfor %}
+                </ul>
+            {%  else %}
+                <h1 class="red ">No games as mouse</h1>
+            {% endif %}
+        </p>
+      {% endif %}
+    {% else %}
+    <p>
+        {% if as_cat %}
+            <h1 class="blanco ">Games as cat:</h1>
+            <ul>
+            {% for game in as_cat %}
+                <li> <a href="{% url 'select_game_cat' game.id %}" class="blanco">{{ game }}</a></li>
+            {% endfor %}
+            </ul>
+        {%  else %}
+            <h1 class="red ">No games as cat</h1>
+        {% endif %}
+    </p>
+    <p>
+        {% if as_mouse %}
+            <h1 class="blanco ">Games as mouse:</h1>
+            <ul>
+            {% for game in as_mouse %}
+                <li> <a href="{% url 'select_game_mouse' game.id %}" class="blanco">{{ game }}</a></li>
+            {% endfor %}
+            </ul>
+        {%  else %}
+            <h1 class="red ">No games as mouse</h1>
+        {% endif %}
+    </p>
+    {% endif %}
+    </div>
+    </div>
+
+    <!-- <p><a href="{% url 'landing' %}">Return to homepage</a></p> -->
+</div>
+{% endblock content %}

@@ -1,0 +1,14 @@
+{% extends "mouse_cat/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+<div id="content">
+    <br>
+    <h1 class="Blanco">Create game</h1>
+    <p>Game <b>{{ game.id }}</b> succesfully created by user <b>{{ game.cat_user.username }}</b></p>
+    <a href="{% url 'create_game' %}" class="central_op">Create another game</a><br>
+    <img class="fotocentropeque" alt="Error" src="{% static 'images/create_game.png' %}"><br>
+    <!-- <p><a href="{% url 'landing' %}">Return to homepage</a></p> -->
+</div>
+{% endblock content %}

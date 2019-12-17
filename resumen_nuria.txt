@@ -1,0 +1,272 @@
+
+Memoria del examen
+
+Grupo:
+
+Link: heroku:
+https://sleepy-springs-81002.herokuapp.com/
+
+1.1. Crear un proyecto llamado proyecto en Django. Dentro del proyecto
+	crear una aplicacion llamada aplicacion
+
+	Crear nuevo proyecto, ejecutamos el comando:
+	    django-admin.py startproject proyecto
+
+	Crear la aplicación, nos metemos dentro del directorio /proyecto y ejecutamos el comando:
+	    python3 manage.py startapp aplicacion
+
+	Al correr este comando te puede salir un error, eso es porque estas poniendo python y no python3!!
+
+	Incluimos en settings.py la aplicacion aplicacion
+	Añadir aplicación en INSTALLED APPS (En proyecto/settings.py) : INSTALLED APPS = [ ...., 'aplicacion', ]
+
+	Ejecutamos, verify that Django picked up your new app by running the development server again: 
+	
+	python manage.py makemigrations
+	python manage.py migrate
+	python manage.py runserver 
+	
+	para probar que funciona.
+
+############################################## Crear vistas ######################################################
+	open the file views.py, located within your newly created app directory.
+	Remove the comment #Create your views here. so that you now have a blank file
+	
+	from django.http import HttpResponse
+		def index(request):
+			return HttpResponse("Rango says hey there partner!")
+	
+	To see the view, create an initial mapping, openurls.pylocated in your project configuration directory 
+	(i.e.<workspace>/proyecto/proyecto/urls.py) and add the following lines of code to the url patterns list:
+	
+	from django.contrib import admin
+	from django.urls import path
+	from django.urls import include
+
+	from rango import views 
+	urlpatterns = [ path('', views.index, name='index'),
+			path('rango/', include('rango.urls')),
+			# The above maps any URLs starting with rango/ to be handled by the rango app.
+		        path('admin/', admin.site.urls),
+		      ]
+
+	we need to create a new file called urls.py in the app directory, to handle there maining URL string 
+	(and map the empty string to the index view):
+	(i.e.<workspace>/proyecto/aplicacion/urls.py)
+	from django.urls import path
+	from rango import views
+	
+	app_name='rango'
+	urlpatterns = [path('', views.index, name='index'),]
+
+###########################################################################################################
+
+1.2. Los  datos  se  persistiran  en  una  base  de  datos llamada examen creada en postgres
+	Creamos la base de datos:
+	    createdb -U alumnodb examen
+	$pasword: alumnodb
+	    
+	Hacemos el export:
+	    export DATABASE_URL='postgres://alumnodb:alumnodb@localhost:5432/examen'
+
+	Cambiamos en el proyecto/settings.py:
+
+	    import dj_database_url
+
+	    STATIC_ROOT = 'staticfiles'
+
+	    DATABASES={}
+		if os.getenv('SQLITE',False):
+		    DATABASES['default'] = {
+		        'ENGINE': 'django.db.backends.sqlite3',
+		        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+		    }
+		else:
+		    DATABASE_URL = 'postgres://alumnodb:alumnodb@localhost:5432/examen'
+		    DATABASES['default']= dj_database_url.config(default=DATABASE_URL)
+
+    
+2. Cread el modelo de datos (fichero models.py)
+	Añadimos en  el fichero aplicacion/models.py
+		from __future__ import unicode_literals
+		from django.contrib.auth.models import User
+		from django.db import models
+
+		Y crear las clases que nos indica el enunciado ver lo que soprta la base de datos: en nuestro caso tiene el esquema: paciente, medico y receta.
+		
+		class paciente(models.Model):
+			nombreP = models.CharField(null=False, max_length=200)
+			def __str__(self):
+				return self.nombreP
+
+
+		class medico(models.Model):
+			nombreM = models.CharField(null=False, max_length=200)
+			def __str__(self):
+				return self.nombreM
+
+
+		class receta(models.Model):
+			paciente = models.ForeignKey(paciente, null=False, on_delete = models.CASCADE)
+			medico = models.ForeignKey(medico, null=False, on_delete = models.CASCADE)
+			def __str__(self):
+				return "Ipaciente: "+str(self.paciente)+" | Imedico: "+str(self.medico)
+
+
+Hacer ADMIN:
+    En el aplicacion/admin.py - Hacer el import y poner lo admin.site.register(cada tabla) ver lo que soprta la base de datos: en nuestro caso tiene el esquema: paciente, medico y receta
+    aplicacion/admin.py
+            from django.contrib import admin
+            from aplicacion.models import paciente, medico, receta 
+
+            admin.site.register(paciente)
+            admin.site.register(medico)
+            admin.site.register(receta)
+
+Volvemos a ejecutar
+Ahora hay que utilizar los siguientes comandos:
+
+	--> python3 manage.py syncdb ##No se si este se necesita
+        python3 manage.py makemigrations
+        python3 manage.py migrate
+        python3 manage.py createsuperuser (no usar mismo correo que contraseña)
+        python3 manage.py runserver ##para comprobar
+
+	--> mirar en http://127.0.0.1:8000/admin/ con contraseña alumnodb alumnodb y vemos que se se han creado las tablas de medicos, pacientes y recetas
+
+#########################
+PROYECTO/URLS:
+    from django.conf.urls import url
+    from django.contrib import admin
+    from django.conf.urls import include
+    from aplicacion import views
+
+    urlpatterns = [
+        url(r'^$', views.index, name='index'),
+        url(r'^admin/', admin.site.urls),
+        url(r'^aplicacion/', include('aplicacion.urls')),
+    ]
+
+En el views.py:
+        from django.shortcuts import render
+        from server.models import medico,paciente,receta
+        from django.http import HttpResponseRedirect, HttpResponse
+        from django.core.exceptions import ObjectDoesNotExist
+########################
+
+3.
+Para hacer el poblar.py en la carpeta proyecto de fuera:
+    
+     import os y os.environ
+     import django
+     django.setup()
+     from aplicacion.models import medico, paciente, receta
+
+     def populate():
+         mirar el poblar.py!!!
+
+4. Despliega  el  proyecto  en  Heroku  y  puebla  la  base  de  datos  usando  el  ficher opoblar.py, asi mismo activa el interfaz de administracion usando como nombre de usuario y password alumnodb.
+Para desplegar la aplicación en heroku:
+    
+    1)Fichero Procfile. Este fichero debe localizarse en el directorio raiz del proyecto, copiar
+		web: gunicorn proyecto.wsgi --log-file - (proyecto porqeu asi se llama nuestro proyecto, si no seria loquesea.wsgi)
+
+    2)crear el fichero runtime.txt y se escribir
+		python-3.6.8
+	 usad la misma version de python que haya en los laboratorios.
+
+	3) pip3 freeze > requirements.txt (por si acaso pongo esto)
+        coverage==4.5.3
+		dj-database-url==0.5.0
+		dj-static==0.0.6
+		Django==2.1.7
+		entrypoints==0.3
+		flake8==3.7.7
+		gunicorn==19.9.0
+		image==1.5.27
+		mccabe==0.6.1
+		Pillow==5.4.1
+		# https://github.com/pypa/pip/issues/4022
+		# pkg−resources==0.0.0
+		psycopg2==2.7.7
+		psycopg2-binary==2.7.7
+		pycodestyle==2.5.0
+		pyflakes==2.1.1
+		pytz==2018.9
+		static3==0.7.0
+
+
+    4)Lo de la DATABASE ya lo hicimos
+
+
+ 	5)En proyecto/wsgi.py añadiendo el siguiente código:
+
+    from django.core.wsgi import get_wsgi_application
+    from dj_static import Cling
+
+    application = Cling(get_wsgi_application())
+    
+    4) Crear el fichero .gitignore en el proyecto fuera:
+    *.pyc
+    staticfiles
+    uploads
+
+	git init
+	git add .
+	git commit -m ’initial commit’
+    
+	heroku login
+    heroku create
+
+Añandir en settings.py:
+
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [STATIC_DIR, ]
+........ faltan cosas que se me han borrado porque se me ha apagado el ordenador lloro......
+
+ y crear carpeta static y añadir archivo test.txt
+
+git push heroku master
+
+si no funciona mirar el .git config
+
+heroku open
+
+Para hacer el .html :
+
+Crear templates/aplicacion 
+    y copiar el codigo que pasan.
+
+En el settings:
+    TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
+
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [TEMPLATE_DIR, ],
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.request',
+                    'django.contrib.auth.context_processors.auth',
+                    'django.contrib.messages.context_processors.messages',
+                ],
+            },
+        },
+    ]
+
+En urls de app:
+
+    from django.conf.urls import include
+    from aplicacion import views
+
+    url(r'^aplicacion/', include('aplicacion.urls')),
+
+    Crear el urls en aplicacion :
+
+        from django.conf.urls import url
+        from aplicacion import views
+
+       
+

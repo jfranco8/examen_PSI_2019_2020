@@ -1,0 +1,217 @@
+html{height:auto;}
+
+#totalheader {float: top; margin: 0 0 0 0; height:90px; width:100%; }
+#title {color: navy; text-align:center; }
+
+#header {color:grey; text-align:right; margin-right:5px; font-weight: bold }
+
+a {color: #666666;; }
+a:hover{color: orange }
+
+.errorList, .error{color:red; font-weight:bold; visibility: hidden; height: 0;}
+.error_join{color:red; font-weight:bold;}
+
+.mouse{color:#77a633; font-weight:bold }
+
+.cat{color:brown; font-weight:bold }
+
+body{
+	background-color: #58B2DF;
+}
+
+header {
+	background-image: linear-gradient(#58B2DF, #22319E);
+	/* background-color: #22319E; */
+  position: absolute;
+	font-size: 10px;
+	font-family: cursive;
+	height: 15%;
+	top:0px;
+	right: 0px;
+	left: 0px;
+	text-align: center;
+}
+
+.logo{
+  width: 50%;
+	height: auto;
+  margin-top: 1%;
+  margin-left: 10%;
+}
+
+#menu_usuario {
+	margin-right: 20px;
+  margin-top: 30px;
+	float: right;
+	max-height: 40px;
+  color: black;
+  background-color: white;
+  border-color: white;
+}
+
+article{
+  margin-top: 7%;
+  /* margin-bottom: 100px; */
+	margin-right: 0;
+	margin-left: 0;
+  width: 100%;
+	height: 80%;
+ 	text-align: center;
+	background-image: url("../images/background.jpg");
+
+}
+
+.boton_abajo{
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+	font-size: 16;
+	text-shadow: 2px 1px black;
+}
+
+.en_linea{
+	display: block;
+}
+
+.fotocentro{
+  width: 40%;
+	height: auto;
+  margin-top: 1%;
+}
+
+.fotocentropeque{
+  width: 30%;
+	height: auto;
+  margin-top: 1%;
+}
+
+.gif_winner_looser{
+  width: 25%;
+	height: auto;
+  margin-top: 1%;
+}
+
+.central_op{
+  color: white;
+	font-weight: bold;
+	text-decoration: none;
+	font-size: 20;
+	text-shadow: 2px 1px black;
+}
+
+.central_op_logout{
+  /* color: grey; */
+	color: #AA000A;
+	font-weight: bold;
+	text-decoration: none;
+	font-size: 20;
+	text-shadow: 2px 1px grey;
+}
+
+.login_div{
+	/* background-color: grey; */
+	width: 30%;
+	margin-left: 35%;
+	background-image: linear-gradient(#58B2DF, #22319E);
+	margin-top: 8%;
+	position: absolute;
+}
+
+.signup_div{
+	/* background-color: grey; */
+	color: white;
+	width: 40%;
+	margin-left: 30%;
+	background-image: linear-gradient(#58B2DF, #22319E);
+	margin-top: 4%;
+	position: absolute;
+}
+
+.blanco{
+	color: white;
+}
+
+#login_form{
+	color: white;
+}
+
+.boton_login{
+	color: white;
+	background-color: #58B2DF;
+	border-radius: 20px;
+	font-size: 18;
+	font-weight: bold;
+	border-color: black;
+}
+
+.boton_login:hover {
+  background-color: orange; /* Green */
+}
+
+.negrita{
+	font-weight: bold;
+}
+
+.in_linea{
+	display: inline-flex;
+}
+
+.filters_div{
+	/* background-color: grey; */
+	width: 20%;
+	/* margin-left: 35%; */
+	margin-left: 5%;
+	background-image: linear-gradient(#58B2DF, #22319E);
+	/* margin-top: 8%; */
+	position: absolute;
+}
+
+.game_info_div{
+	/* background-color: grey; */
+	width: 20%;
+	/* margin-left: 35%; */
+	margin-left: 15%;
+	background-image: linear-gradient(#58B2DF, #22319E);
+	/* margin-top: 8%; */
+	position: absolute;
+}
+
+.games_div{
+	/* background-color: grey; */
+	width: 70%;
+	/* margin-left: 35%; */
+	right: 2%;
+	background-image: linear-gradient(#58B2DF, #22319E);
+	/* margin-top: 8%; */
+	position: absolute;
+}
+
+.game_div{
+	/* background-color: grey; */
+	/* width: 35%; */
+	/* margin-left: 35%; */
+	right: 20%;
+	background-image: linear-gradient(#58B2DF, #22319E);
+	/* margin-top: 8%; */
+	position: absolute;
+}
+
+.tam_total{
+	width: 100%;
+}
+
+.red{
+	color: #AA000A;
+}
+
+.pequeñaimagen{
+	height: 15%;
+}
+
+.cuadradoblanco{
+	background-color: white;
+}
+
+.cuadradonegro{
+	background-color: navy;
+}

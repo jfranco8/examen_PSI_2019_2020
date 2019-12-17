@@ -1,0 +1,18 @@
+{% extends "mouse_cat/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+<div id="content">
+    <br>
+    <h1 class=blanco>Join game</h1>
+    {% if msg_error %}
+        <p class="error_join">ERROR: {{ msg_error }}</p>
+    {% else %}
+        <p><b>{{ game.mouse_user.username }}</b> succesfully joined to game <b>{{ game.id }}</b>. The game can start!!!</p>
+        <a href="{% url 'join_game' %}" class="central_op">Join another game</a><br>
+    {% endif %}
+    <img class="fotocentropeque" alt="Error" src="{% static 'images/create_game.png' %}"><br>
+    <!-- <p><a href="{% url 'landing' %}">Return to homepage</a></p> -->
+</div>
+{% endblock content %}
